@@ -10,9 +10,66 @@ export type OrganizationModel = {
   phoneNumber: string; // The primary contact phone number for the organization.
   email: string; // The primary contact email address for the organization.
   website?: string; // (Optional) The organization's website URL, if available.
-  foundingDate?: Date; // (Optional) The date when the organization was founded.
+  foundingDate?: string; // (Optional) The date when the organization was founded.
   industry?: string; // (Optional) The industry or sector to which the organization belongs.
   description?: string; // (Optional) A brief description or overview of the organization.
+};
+
+export type OrganizationCreateModel = {
+  name: string;
+  registrationNumber: string;
+  address: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phoneNumber: string;
+  email: string;
+  website?: string;
+  foundingDate?: string;
+  industry?: string;
+  description?: string;
+};
+
+export type OrganizationUpdateModel = {
+  name?: string;
+  registrationNumber?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+  phoneNumber?: string;
+  email?: string;
+  website?: string;
+  foundingDate?: string;
+  industry?: string;
+  description?: string;
+};
+
+export type OrganizationUpdateArgsModel = {
+  where: OrganizationUpdateWhereModel;
+  data: OrganizationUpdateDataModel;
+};
+
+export type OrganizationUpdateWhereModel = {
+  id: string;
+};
+
+export type OrganizationUpdateDataModel = {
+  name?: string;
+  registrationNumber?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+  phoneNumber?: string;
+  email?: string;
+  website?: string;
+  foundingDate?: string;
+  industry?: string;
+  description?: string;
 };
 
 export type UserModel = {

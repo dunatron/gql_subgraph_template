@@ -8,6 +8,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -15,6 +16,24 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  /** Create an organization */
+  createOrganization: Organization;
+  /** Update an organization */
+  updateOrganization: Organization;
+};
+
+
+export type MutationCreateOrganizationArgs = {
+  input: OrganizationCreateArgs;
+};
+
+
+export type MutationUpdateOrganizationArgs = {
+  input: OrganizationUpdateArgs;
 };
 
 export type Organization = {
@@ -49,10 +68,64 @@ export type Organization = {
   website?: Maybe<Scalars['String']['output']>;
 };
 
+/** create organization arguments */
+export type OrganizationCreateArgs = {
+  data: OrganizationCreateInput;
+};
+
+/** Create organization input data */
+export type OrganizationCreateInput = {
+  address: Scalars['String']['input'];
+  city: Scalars['String']['input'];
+  country: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  foundingDate?: InputMaybe<Scalars['String']['input']>;
+  industry?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  phoneNumber: Scalars['String']['input'];
+  postalCode: Scalars['String']['input'];
+  registrationNumber: Scalars['String']['input'];
+  state: Scalars['String']['input'];
+  website?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type OrganizationUpdateArgs = {
+  data: OrganizationUpdateInput;
+  where: OrganizationUpdateWhereInput;
+};
+
+export type OrganizationUpdateInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  foundingDate?: InputMaybe<Scalars['String']['input']>;
+  industry?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+  registrationNumber?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  website?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type OrganizationUpdateWhereInput = {
+  id: Scalars['ID']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  /** Get a single organization */
+  organization: Organization;
   /** Get a list of organizations */
   organizations: Array<Organization>;
+};
+
+
+export type QueryOrganizationArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -128,7 +201,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Organization: ResolverTypeWrapper<OrganizationModel>;
+  OrganizationCreateArgs: OrganizationCreateArgs;
+  OrganizationCreateInput: OrganizationCreateInput;
+  OrganizationUpdateArgs: OrganizationUpdateArgs;
+  OrganizationUpdateInput: OrganizationUpdateInput;
+  OrganizationUpdateWhereInput: OrganizationUpdateWhereInput;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 };
@@ -137,9 +216,20 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   ID: Scalars['ID']['output'];
+  Mutation: {};
   Organization: OrganizationModel;
+  OrganizationCreateArgs: OrganizationCreateArgs;
+  OrganizationCreateInput: OrganizationCreateInput;
+  OrganizationUpdateArgs: OrganizationUpdateArgs;
+  OrganizationUpdateInput: OrganizationUpdateInput;
+  OrganizationUpdateWhereInput: OrganizationUpdateWhereInput;
   Query: {};
   String: Scalars['String']['output'];
+};
+
+export type MutationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createOrganization?: Resolver<ResolversTypes['Organization'], ParentType, ContextType, RequireFields<MutationCreateOrganizationArgs, 'input'>>;
+  updateOrganization?: Resolver<ResolversTypes['Organization'], ParentType, ContextType, RequireFields<MutationUpdateOrganizationArgs, 'input'>>;
 };
 
 export type OrganizationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Organization'] = ResolversParentTypes['Organization']> = {
@@ -161,10 +251,12 @@ export type OrganizationResolvers<ContextType = DataSourceContext, ParentType ex
 };
 
 export type QueryResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  organization?: Resolver<ResolversTypes['Organization'], ParentType, ContextType, RequireFields<QueryOrganizationArgs, 'id'>>;
   organizations?: Resolver<Array<ResolversTypes['Organization']>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = DataSourceContext> = {
+  Mutation?: MutationResolvers<ContextType>;
   Organization?: OrganizationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };

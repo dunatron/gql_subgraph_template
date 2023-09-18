@@ -4,6 +4,15 @@ export const typeDefs = gql`
   type Query {
     "Get a list of organizations"
     organizations: [Organization!]!
+    "Get a single organization"
+    organization(id: ID!): Organization!
+  }
+
+  type Mutation {
+    "Create an organization"
+    createOrganization(input: OrganizationCreateArgs!): Organization!
+    "Update an organization"
+    updateOrganization(input: OrganizationUpdateArgs!): Organization!
   }
 
   type Organization {
@@ -34,6 +43,53 @@ export const typeDefs = gql`
     "The industry or sector to which the organization belongs (optional)"
     industry: String
     "A brief description or overview of the organization (optional)"
+    description: String
+  }
+
+  "create organization arguments"
+  input OrganizationCreateArgs {
+    data: OrganizationCreateInput!
+  }
+
+  "Create organization input data"
+  input OrganizationCreateInput {
+    name: String!
+    registrationNumber: String!
+    address: String!
+    city: String!
+    state: String!
+    postalCode: String!
+    country: String!
+    phoneNumber: String!
+    email: String!
+    website: String
+    foundingDate: String
+    industry: String
+    description: String
+  }
+
+  input OrganizationUpdateArgs {
+    where: OrganizationUpdateWhereInput!
+    data: OrganizationUpdateInput!
+  }
+
+  input OrganizationUpdateWhereInput {
+    id: ID!
+  }
+
+  input OrganizationUpdateInput {
+    name: String
+    registrationNumber: String
+    address: String
+    city: String
+    state: String
+    postalCode: String
+    country: String
+    phoneNumber: String
+    email: String
+    website: String
+    foundingDate: String
+    industry: String
     description: String
   }
 `;
